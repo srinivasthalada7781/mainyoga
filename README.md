@@ -4,45 +4,69 @@ Bhusurya is a digital platform that automates yoga competition management, conne
 
 ## 🌟 Key Features
 
-### 1. Admin Portal
+### Admin Portal
 - Create and manage events (category, age group, number of asanas)
-- Add judges (D and T judges) and assign them to events
-- Approve athlete registrations
-- Live scoring dashboard with automatic updates
-- Auto-calculation of Top 10 athletes
-- Export results (CSV/PDF)
-- Send notifications to athletes or judges
+- Assign D and T judges to events
+- View live scoring dashboard with all judges' submissions
+- Automatically calculate final scores
+- Show Top 10 leaderboard
+- Export results as CSV/PDF
+- Send notifications to athletes/judges
 
-### 2. Athlete Portal
-- Register for events (auto-categorized by age and event type)
-- View assigned events
-- See final scores and ranking after judge submissions
+### Athlete Portal
+- Register for events (name, age, category, event)
+- View assigned events and final score
+- Access Top 10 leaderboard
 - Download participation/result certificates
-- Track progress over multiple events
 
-### 3. Judge Portal
-#### D Judges (Difficulty Judges)
-- Enter marks for each asana (out of 10)
-- System auto-calculates total D score scaled to 8
-- Formula: `D = (Sum of Asana Marks / Total Possible Marks) × 8`
+### D-Judge Portal (Difficulty Judges)
+- View list of athletes and asanas per event
+- Input marks per asana (0–10)
+- Auto-scale total D marks to out of 8:
+  - Formula: D = (Sum of Asana Marks / Total Possible Marks) × 8
+- Submit scores, which update live in Google Sheets
 
-#### T Judges (Technical Judges)
-- Enter overall performance score (out of 2)
-- Judge Total = D + T (out of 10)
+### T-Judge Portal (Technical Judges)
+- View athletes in assigned events
+- Input technique/presentation scores (0–2)
+- Submit scores, which update live in Google Sheets
 
-### 4. Final Score Calculation
-- System removes highest and lowest scores from all judges
-- Sums remaining scores for final result
-- Example: Scores 9, 8, 9.5, 6, 7 → Remove 9.5 & 6 → Sum 9 + 8 + 7 = 24 (out of 30)
+## 🏗️ Scoring Logic
 
-### 5. Live Backend with Google Sheets
-- All data stored in Google Sheets
-- Each judge's submission updates their sheet via Forms or API integration
-- Admin dashboard reads sheet live for:
-  - Scores per athlete per judge
-  - Final scores (after removing highest/lowest)
-  - Top 10 leaderboard
-- Athletes' portal also reads sheet live for instant score updates
+- **Total per judge** = D + T (out of 10)
+- **For ≥3 judges:**
+  - Drop highest and lowest judge totals
+  - Sum remaining scores → Final score (do not divide)
+  - Example: Scores = 9, 8, 9.5, 6, 7 → Remove 9.5 & 6 → Sum = 24/30
+- **For <3 judges:**
+  - Sum all scores directly
+- Display final score and rank on Admin and Athlete portals
+- Leaderboard auto-updates based on final scores
+
+## 🗄️ Backend
+
+- **Google Sheets:**
+  - Store athletes, judges, events, and scores
+  - Use formulas/scripts for auto-calculation of D, T, and final scores
+  - Update leaderboard in real-time
+- **Optional:** Google Apps Script for notifications & certificate generation
+
+## 📊 Data Models
+
+- **Events:** id, name, category, age_group, num_asanas, status, created_at, updated_at
+- **Athletes:** id, name, age, event_id, registration_no
+- **Judges:** id, name, role (D/T), assigned_events
+- **AsanaScores (D Judge):** athlete_id, judge_id, asana_index, mark, timestamp
+- **JudgeScores:** athlete_id, judge_id, d_score_out_of_8, t_score_out_of_2, judge_total_out_of_10
+- **Results:** athlete_id, event_id, final_score, rank, dropped_highest, dropped_lowest
+
+## 🎨 UI & UX Notes
+
+- Responsive design for web and mobile
+- Tooltips explaining scoring (D scaled to 8, T out of 2)
+- Leaderboard shows sum after dropping highest & lowest
+- Admin can lock scores after submission
+- Color-coded leaderboard for top performers
 
 ## 🏗️ Tech Architecture
 
@@ -63,8 +87,8 @@ Bhusurya is a digital platform that automates yoga competition management, conne
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd bhusurya
+   git clone https://github.com/srinivasthalada7781/mainyoga.git
+   cd mainyoga/bhusurya
    ```
 
 2. Install dependencies:
@@ -85,7 +109,7 @@ src/
 ├── portals/
 │   ├── admin/       # Admin Portal components
 │   ├── athlete/     # Athlete Portal components
-│   └── judge/       # Judge Portal components
+│   └── judge/       # Judge Portal components (D-Judge and T-Judge)
 ├── services/        # Google Sheets integration service
 ├── utils/           # Utility functions
 ├── assets/          # Static assets
@@ -95,8 +119,9 @@ src/
 ## 🎯 Usage
 
 1. **Admin Portal** (`/admin`): Manage events, judges, athletes, and view live results
-2. **Athlete Portal** (`/athlete`): Register for events and view scores/certificates
-3. **Judge Portal** (`/judge`): Enter scores for assigned events
+2. **Athlete Portal** (`/athlete`): Register for events, view scores, leaderboard, and certificates
+3. **D-Judge Portal** (`/judge`): Enter difficulty scores for asanas
+4. **T-Judge Portal** (`/tjudge`): Enter technical scores
 
 ## 📤 Google Sheets Integration
 

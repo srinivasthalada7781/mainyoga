@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import './App.css'
 
-// Portal Components (to be implemented)
+// Portal Components
 import AdminPortal from './portals/admin/AdminPortal'
 import AthletePortal from './portals/athlete/AthletePortal'
 import JudgePortal from './portals/judge/JudgePortal'
+import TJudgePortal from './portals/judge/TJudgePortal'
 
 function App() {
   const location = useLocation()
@@ -21,7 +22,8 @@ function App() {
           <li><Link to="/" className={getNavLinkClass('/')}>Home</Link></li>
           <li><Link to="/admin" className={getNavLinkClass('/admin')}>Admin Portal</Link></li>
           <li><Link to="/athlete" className={getNavLinkClass('/athlete')}>Athlete Portal</Link></li>
-          <li><Link to="/judge" className={getNavLinkClass('/judge')}>Judge Portal</Link></li>
+          <li><Link to="/judge" className={getNavLinkClass('/judge')}>D-Judge Portal</Link></li>
+          <li><Link to="/tjudge" className={getNavLinkClass('/tjudge')}>T-Judge Portal</Link></li>
         </ul>
       </nav>
 
@@ -29,6 +31,7 @@ function App() {
         <Route path="/admin/*" element={<AdminPortal />} />
         <Route path="/athlete/*" element={<AthletePortal />} />
         <Route path="/judge/*" element={<JudgePortal />} />
+        <Route path="/tjudge/*" element={<TJudgePortal />} />
         <Route path="/" element={
           <div className="home">
             <h1>Bhusurya Yoga Competition Management System</h1>
@@ -51,8 +54,15 @@ function App() {
               
               <Link to="/judge" className="portal-link judge">
                 <div>
-                  <h2>Judge Portal</h2>
-                  <p>Enter scores for assigned events</p>
+                  <h2>D-Judge Portal</h2>
+                  <p>Enter difficulty scores for asanas (0-10)</p>
+                </div>
+              </Link>
+              
+              <Link to="/tjudge" className="portal-link judge">
+                <div>
+                  <h2>T-Judge Portal</h2>
+                  <p>Enter technical scores (0-2)</p>
                 </div>
               </Link>
             </div>
@@ -61,7 +71,7 @@ function App() {
               <h2>Key Features</h2>
               <div className="grid grid-cols-3">
                 <div className="card">
-                  <h3> Automated Scoring</h3>
+                  <h3>Automated Scoring</h3>
                   <p>Eliminates calculation errors with automatic score computation</p>
                 </div>
                 <div className="card">

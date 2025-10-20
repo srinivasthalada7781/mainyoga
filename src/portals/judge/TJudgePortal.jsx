@@ -3,29 +3,28 @@ import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import googleSheetsService from '../../services/googleSheetsService'
 import './JudgePortal.css'
 
-const JudgePortal = () => {
-  const [judgeType] = useState('D') // 'D' for Difficulty Judge, 'T' for Technical Judge
+const TJudgePortal = () => {
   const location = useLocation()
   
   const getNavLinkClass = (path) => {
-    return location.pathname === `/judge${path}` ? 'active' : ''
+    return location.pathname === `/tjudge${path}` ? 'active' : ''
   }
   
   return (
     <div className="judge-portal">
       <header className="judge-header">
-        <h1>D-Judge Portal (Difficulty Scoring)</h1>
+        <h1>T-Judge Portal (Technical Scoring)</h1>
         <nav>
-          <Link to="/judge" className={getNavLinkClass('')}>Dashboard</Link>
-          <Link to="/judge/scores" className={getNavLinkClass('/scores')}>Enter Scores</Link>
-          <Link to="/judge/history" className={getNavLinkClass('/history')}>Scoring History</Link>
+          <Link to="/tjudge" className={getNavLinkClass('')}>Dashboard</Link>
+          <Link to="/tjudge/scores" className={getNavLinkClass('/scores')}>Enter Scores</Link>
+          <Link to="/tjudge/history" className={getNavLinkClass('/history')}>Scoring History</Link>
         </nav>
       </header>
       
       <div className="container">
         <Routes>
-          <Route path="/" element={<JudgeDashboard judgeType={judgeType} />} />
-          <Route path="/scores" element={<EnterScores judgeType={judgeType} />} />
+          <Route path="/" element={<JudgeDashboard />} />
+          <Route path="/scores" element={<EnterScores />} />
           <Route path="/history" element={<ScoringHistory />} />
         </Routes>
       </div>
@@ -33,7 +32,7 @@ const JudgePortal = () => {
   )
 }
 
-const JudgeDashboard = ({ judgeType }) => {
+const JudgeDashboard = () => {
   const [assignedEvents, setAssignedEvents] = useState([])
   const [pendingScores, setPendingScores] = useState([])
   const [loading, setLoading] = useState(true)
@@ -58,8 +57,7 @@ const JudgeDashboard = ({ judgeType }) => {
               athleteId: athlete.id,
               athleteName: athlete.name,
               eventId: athlete.event_id,
-              eventName: event ? event.name : 'Unknown Event',
-              asanas: event ? event.num_asanas : 0
+              eventName: event ? event.name : 'Unknown Event'
             }
           })
         
@@ -82,10 +80,10 @@ const JudgeDashboard = ({ judgeType }) => {
     <div className="judge-dashboard">
       <div className="judge-info card">
         <div className="card-header">
-          <h2>Welcome, D-Judge!</h2>
+          <h2>Welcome, T-Judge!</h2>
         </div>
         
-        <p><strong>Judge Type:</strong> Difficulty Judge (D-Judge)</p>
+        <p><strong>Judge Type:</strong> Technical Judge (T-Judge)</p>
         <p><strong>Events Assigned:</strong> {assignedEvents.length}</p>
         <p><strong>Pending Scores:</strong> {pendingScores.length}</p>
       </div>
@@ -127,9 +125,8 @@ const JudgeDashboard = ({ judgeType }) => {
                 <div>
                   <p><strong>Athlete:</strong> {score.athleteName}</p>
                   <p><strong>Event:</strong> {score.eventName}</p>
-                  <p><strong>Asanas to Score:</strong> {score.asanas}</p>
                 </div>
-                <Link to="/judge/scores">
+                <Link to="/tjudge/scores">
                   <button>Enter Score</button>
                 </Link>
               </div>
@@ -141,7 +138,7 @@ const JudgeDashboard = ({ judgeType }) => {
   )
 }
 
-const EnterScores = ({ judgeType }) => {
+const EnterScores = () => {
   const [selectedAthlete, setSelectedAthlete] = useState(null)
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [athletes, setAthletes] = useState([])
@@ -186,7 +183,7 @@ const EnterScores = ({ judgeType }) => {
     <div className="enter-scores">
       <div className="card">
         <div className="card-header">
-          <h2>Enter Difficulty Scores</h2>
+          <h2>Enter Technical Scores</h2>
         </div>
         
         <div className="score-selection">
@@ -207,19 +204,17 @@ const EnterScores = ({ judgeType }) => {
         </div>
         
         {selectedAthlete && selectedEvent ? (
-          <EnterDScores 
+          <EnterTScores 
             athlete={selectedAthlete} 
             event={selectedEvent} 
           />
         ) : (
           <div className="instructions">
-            <h3>Instructions for D-Judges</h3>
+            <h3>Instructions for T-Judges</h3>
             <ul>
-              <li>Enter marks for each asana on a scale of 0-10</li>
-              <li>The system will automatically calculate the D-Score scaled to 8</li>
-              <li>Formula: D = (Sum of Asana Marks / Total Possible Marks) × 8</li>
-              <li>Example: If an athlete performs 5 asanas with scores 8, 7, 9, 7, 8, the calculation would be:
-                <br />(8+7+9+7+8) / (5×10) × 8 = 39/50 × 8 = 6.24</li>
+              <li>Enter technique/presentation scores on a scale of 0-2</li>
+              <li>Consider overall performance, form, and presentation</li>
+              <li>Score will be added to the D-Score to calculate the final judge total</li>
             </ul>
           </div>
         )}
@@ -228,75 +223,40 @@ const EnterScores = ({ judgeType }) => {
   )
 }
 
-const EnterDScores = ({ athlete, event }) => {
-  const [asanaScores, setAsanaScores] = useState(
-    Array.from({ length: event.num_asanas }, (_, i) => ({
-      id: i + 1,
-      name: `Asana ${i + 1}`,
-      score: ''
-    }))
-  )
-  
-  const handleScoreChange = (asanaId, value) => {
-    const numValue = parseFloat(value) || 0
-    if (numValue >= 0 && numValue <= 10) {
-      setAsanaScores(asanaScores.map(asana => 
-        asana.id === asanaId ? { ...asana, score: value } : asana
-      ))
-    }
-  }
-  
-  const calculateTotal = () => {
-    const scoredAsanas = asanaScores.filter(a => a.score !== '')
-    if (scoredAsanas.length === 0) return 0
-    
-    const totalScore = scoredAsanas.reduce((sum, asana) => sum + (parseFloat(asana.score) || 0), 0)
-    const maxPossible = event.num_asanas * 10
-    return (totalScore / maxPossible) * 8
-  }
+const EnterTScores = ({ athlete, event }) => {
+  const [techScore, setTechScore] = useState('')
   
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (techScore === '' || isNaN(techScore) || techScore < 0 || techScore > 2) {
+      alert('Please enter a valid technical score between 0 and 2')
+      return
+    }
+    
     try {
-      const total = calculateTotal()
-      
-      // Save individual asana scores
-      const asanaScoresToSave = asanaScores.map(asana => ({
-        athlete_id: athlete.id,
-        judge_id: 1, // Mock judge ID
-        asana_index: asana.id,
-        mark: parseFloat(asana.score) || 0,
-        timestamp: new Date().toISOString()
-      }))
-      
-      // Save each asana score
-      for (const score of asanaScoresToSave) {
-        await googleSheetsService.addAsanaScore(score)
-      }
-      
-      // Save judge score with calculated D score
+      // Save judge score with T score
       const judgeScore = {
         athlete_id: athlete.id,
-        judge_id: 1, // Mock judge ID
-        d_score_out_of_8: total,
-        t_score_out_of_2: null,
-        judge_total_out_of_10: total
+        judge_id: 2, // Mock judge ID for T judge
+        d_score_out_of_8: null,
+        t_score_out_of_2: parseFloat(techScore),
+        judge_total_out_of_10: parseFloat(techScore)
       }
       
       await googleSheetsService.addJudgeScore(judgeScore)
       
-      alert(`D-Score calculated: ${total.toFixed(2)}\nScores submitted successfully!`)
+      alert(`T-Score submitted: ${techScore}\nScores submitted successfully!`)
       
       // Reset form
-      setAsanaScores(asanaScores.map(a => ({ ...a, score: '' })))
+      setTechScore('')
     } catch (error) {
-      console.error('Error submitting scores:', error)
-      alert('Error submitting scores. Please try again.')
+      console.error('Error submitting score:', error)
+      alert('Error submitting score. Please try again.')
     }
   }
   
   return (
-    <div className="enter-d-scores">
+    <div className="enter-t-scores">
       <div className="scoring-header">
         <p><strong>Athlete:</strong> {athlete.name}</p>
         <p><strong>Event:</strong> {event.name}</p>
@@ -304,37 +264,37 @@ const EnterDScores = ({ athlete, event }) => {
       </div>
       
       <form onSubmit={handleSubmit}>
-        <div className="asana-scores">
-          <h3>Asana Scores (0-10 each)</h3>
-          <div className="scores-grid">
-            {asanaScores.map(asana => (
-              <div key={asana.id} className="asana-score">
-                <label>{asana.name}</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  value={asana.score}
-                  onChange={(e) => handleScoreChange(asana.id, e.target.value)}
-                  placeholder="0-10"
-                />
-              </div>
-            ))}
+        <div className="tech-score-input">
+          <label htmlFor="techScore">Technical Performance Score (0-2):</label>
+          <input
+            type="number"
+            id="techScore"
+            min="0"
+            max="2"
+            step="0.1"
+            value={techScore}
+            onChange={(e) => setTechScore(e.target.value)}
+            placeholder="Enter score (0-2)"
+            required
+          />
+          <div className="score-info">
+            <p><strong>Scoring Guide:</strong></p>
+            <ul>
+              <li>0.0-0.5: Poor technique/presentation</li>
+              <li>0.6-1.0: Below average technique/presentation</li>
+              <li>1.1-1.5: Average technique/presentation</li>
+              <li>1.6-2.0: Excellent technique/presentation</li>
+            </ul>
           </div>
         </div>
         
         <div className="score-summary">
           <div className="total-score">
-            <h3>Calculated D-Score: <span>{calculateTotal().toFixed(2)}</span>/8</h3>
-            <p className="formula">
-              Formula: (Sum of Asana Marks / Total Possible Marks) × 8<br />
-              Calculation: ({asanaScores.filter(a => a.score !== '').map(a => a.score).join(' + ') || 0}) / ({event.num_asanas} × 10) × 8
-            </p>
+            <h3>T-Score: <span>{techScore || '0.0'}</span>/2</h3>
           </div>
           
-          <button type="submit" disabled={asanaScores.every(a => a.score === '')}>
-            Submit Scores
+          <button type="submit" disabled={techScore === ''}>
+            Submit Score
           </button>
         </div>
       </form>
@@ -350,24 +310,22 @@ const ScoringHistory = () => {
     const fetchHistory = async () => {
       try {
         const scoresData = await googleSheetsService.getJudgeScores()
-        const asanaScoresData = await googleSheetsService.getAsanaScores()
         const athletesData = await googleSheetsService.getAthletes()
         const eventsData = await googleSheetsService.getEvents()
         
+        // Filter for T judge scores only (where t_score_out_of_2 is not null)
+        const tJudgeScores = scoresData.filter(score => score.t_score_out_of_2 !== null)
+        
         // Combine data for display
-        const historyData = scoresData.map(score => {
+        const historyData = tJudgeScores.map(score => {
           const athlete = athletesData.find(a => a.id === score.athlete_id)
           const event = eventsData.find(e => e.id === athlete?.event_id)
-          const asanaScores = asanaScoresData.filter(a => 
-            a.athlete_id === score.athlete_id && a.judge_id === score.judge_id
-          )
           
           return {
             ...score,
             athlete_name: athlete ? athlete.name : 'Unknown Athlete',
             event_name: event ? event.name : 'Unknown Event',
-            registration_no: athlete ? athlete.registration_no : 'N/A',
-            asana_scores: asanaScores
+            registration_no: athlete ? athlete.registration_no : 'N/A'
           }
         })
         
@@ -404,7 +362,6 @@ const ScoringHistory = () => {
                   <th>Athlete</th>
                   <th>Registration No</th>
                   <th>Event</th>
-                  <th>D-Score</th>
                   <th>T-Score</th>
                   <th>Total</th>
                 </tr>
@@ -416,9 +373,8 @@ const ScoringHistory = () => {
                     <td>{entry.athlete_name}</td>
                     <td>{entry.registration_no}</td>
                     <td>{entry.event_name}</td>
-                    <td>{entry.d_score_out_of_8 !== null ? entry.d_score_out_of_8.toFixed(2) : 'N/A'}</td>
                     <td>{entry.t_score_out_of_2 !== null ? entry.t_score_out_of_2.toFixed(1) : 'N/A'}</td>
-                    <td>{entry.judge_total_out_of_10 !== null ? entry.judge_total_out_of_10.toFixed(2) : 'N/A'}</td>
+                    <td>{entry.judge_total_out_of_10 !== null ? entry.judge_total_out_of_10.toFixed(1) : 'N/A'}</td>
                   </tr>
                 ))}
               </tbody>
@@ -430,4 +386,4 @@ const ScoringHistory = () => {
   )
 }
 
-export default JudgePortal
+export default TJudgePortal

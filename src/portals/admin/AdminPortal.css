@@ -84,7 +84,84 @@
   font-weight: 500;
 }
 
-.event-management, .judge-management, .athlete-management, .results-dashboard {
+.recent-events table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.recent-events th, .recent-events td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.recent-events th {
+  background: #4361ee;
+  color: white;
+  font-weight: 600;
+}
+
+.recent-events tr:last-child td {
+  border-bottom: none;
+}
+
+.recent-events tr:hover {
+  background-color: #f1f5f9;
+}
+
+.status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status.active {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.status.upcoming {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+.quick-actions {
+  margin-top: 2rem;
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.action-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.action-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.action-card h3 {
+  margin-top: 0;
+  color: #4361ee;
+}
+
+.event-management, .judge-management, .athlete-management, .results-dashboard, .notification-system {
   background: white;
   padding: 2rem;
   border-radius: 8px;
@@ -125,7 +202,7 @@
   color: #334155;
 }
 
-.form-group input, .form-group select {
+.form-group input, .form-group select, .form-group textarea {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #cbd5e1;
@@ -134,10 +211,26 @@
   transition: all 0.3s ease;
 }
 
-.form-group input:focus, .form-group select:focus {
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
   outline: none;
   border-color: #4361ee;
   box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+.event-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkbox-item input {
+  width: auto;
 }
 
 .events-list table, .judges-list table, .athlete-management table, .results-dashboard table {
@@ -212,29 +305,104 @@ button.danger {
   min-width: 150px;
 }
 
-.recent-activity {
+.event-selector {
+  margin-bottom: 2rem;
+}
+
+.event-selector label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.event-selector select {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.live-leaderboard table {
+  width: 100%;
+  border-collapse: collapse;
   background: white;
-  padding: 2rem;
   border-radius: 8px;
+  overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.recent-activity h3 {
-  margin-top: 0;
-  color: #1e293b;
-}
-
-.recent-activity ul {
-  list-style-type: none;
-}
-
-.recent-activity li {
-  padding: 0.75rem 0;
+.live-leaderboard th, .live-leaderboard td {
+  padding: 1rem;
+  text-align: left;
   border-bottom: 1px solid #e2e8f0;
 }
 
-.recent-activity li:last-child {
+.live-leaderboard th {
+  background: #4361ee;
+  color: white;
+  font-weight: 600;
+}
+
+.live-leaderboard tr:last-child td {
   border-bottom: none;
+}
+
+.live-leaderboard tr:hover {
+  background-color: #f1f5f9;
+}
+
+.rank-1 {
+  background-color: #fffbeb;
+}
+
+.rank-2 {
+  background-color: #f0f9ff;
+}
+
+.rank-3 {
+  background-color: #f0fdf4;
+}
+
+.notifications-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.notification-item:hover {
+  background-color: #f1f5f9;
+}
+
+.notification-item.unread {
+  background-color: #eff6ff;
+  border-left: 4px solid #4361ee;
+}
+
+.notification-item h4 {
+  margin: 0 0 0.5rem 0;
+  color: #1e293b;
+}
+
+.notification-item p {
+  margin: 0 0 0.5rem 0;
+  color: #64748b;
+}
+
+.time {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.send-notification form {
+  margin-top: 1rem;
 }
 
 @media (max-width: 768px) {
@@ -247,11 +415,15 @@ button.danger {
     align-items: stretch;
   }
   
-  .event-management, .judge-management, .athlete-management, .results-dashboard {
+  .event-management, .judge-management, .athlete-management, .results-dashboard, .notification-system {
     padding: 1.5rem;
   }
   
   .export-options {
     flex-direction: column;
+  }
+  
+  .actions-grid {
+    grid-template-columns: 1fr;
   }
 }
