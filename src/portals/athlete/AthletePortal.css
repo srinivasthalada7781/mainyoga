@@ -1,0 +1,338 @@
+.athlete-portal {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 0;
+  background-color: #f1f5f9;
+  min-height: 100vh;
+}
+
+.athlete-header {
+  background: linear-gradient(135deg, #8e44ad, #9b59b6);
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.athlete-header h1 {
+  margin: 0 0 1rem 0;
+  text-align: center;
+  font-size: 1.8rem;
+}
+
+.athlete-header nav {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.athlete-header nav a {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.athlete-header nav a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.athlete-header nav a.active {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.athlete-dashboard .athlete-profile {
+  background: linear-gradient(135deg, white, #f8fafc);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.athlete-profile h2 {
+  margin-top: 0;
+  color: #8e44ad;
+}
+
+.profile-info p {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.registered-events .events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.event-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.event-card h4 {
+  margin-top: 0;
+  color: #8e44ad;
+}
+
+.status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.status.upcoming {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+.performance-summary {
+  background: linear-gradient(135deg, white, #f8fafc);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-top: 2rem;
+}
+
+.performance-summary h3 {
+  margin-top: 0;
+  color: #8e44ad;
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.stat {
+  text-align: center;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.stat h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  color: #8e44ad;
+}
+
+.event-registration .events-list {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin: 2rem 0;
+}
+
+.event-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.event-item:last-child {
+  border-bottom: none;
+}
+
+.event-item input[type="checkbox"] {
+  margin-right: 1rem;
+  margin-top: 0.5rem;
+  transform: scale(1.2);
+}
+
+.event-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.event-details span {
+  background-color: #ede9fe;
+  color: #7c3aed;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.my-scores .scores-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.score-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.score-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.score-header h3 {
+  margin: 0;
+  color: #8e44ad;
+}
+
+.final-score {
+  display: flex;
+  gap: 1.5rem;
+  font-weight: 500;
+}
+
+.final-score strong {
+  color: #8e44ad;
+}
+
+.score-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.score-breakdown {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.score-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.score-item:last-child {
+  border-bottom: none;
+}
+
+.judges-scores {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.judges-scores h4 {
+  margin-top: 0;
+  color: #8e44ad;
+}
+
+.judge-score {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.judge-score:last-child {
+  border-bottom: none;
+}
+
+.certificates .certificates-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.certificate-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.certificate-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.cert-type {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.cert-type.winner {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.cert-type.participation {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+button:disabled {
+  background: linear-gradient(135deg, #94a3b8, #cbd5e1);
+  cursor: not-allowed;
+}
+
+button:disabled:hover {
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .score-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .final-score {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .score-details {
+    grid-template-columns: 1fr;
+  }
+  
+  .event-details {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
